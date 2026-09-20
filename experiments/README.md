@@ -10,7 +10,7 @@ python3 experiments/parent_child.py examples/synthetic-transcript.json --out run
 
 省略 `--run` 只准备本地请求；显式加 `--run` 才发送给 TypeSafe，需要 `TYPESAFE_API_KEY`。每次使用新输出目录。
 
-固定参数为 60 秒父块、前后各 15 秒上下文、每片一个纯闲聊判断和 0.90 删除阈值。片段 ID、原文、时间戳不改写。同一父块的独立问题合并到一次 HTTP 请求。
+固定参数为 60 秒父块、前后各 15 秒上下文，每片只判断一次“是否可安全删除”，输出唯一的 `P(removable)`。所有请求结束后，在整场会议的分数分布中寻找显著独立的最大断层，以断层中点作为自适应删除阈值。若不存在明确断层（包括近似均匀分布），当前版本保留全部片段。片段 ID、原文、时间戳不改写。同一父块的独立问题合并到一次 HTTP 请求。
 
 输入使用 `meeting_notes.py process` 导出的规范化 JSON，或仓库合成样例。子片段需包含唯一 id、start、end、text、source。
 
